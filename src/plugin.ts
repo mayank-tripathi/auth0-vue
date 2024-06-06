@@ -23,19 +23,6 @@ import type {
 import { Auth0Client, User } from '@auth0/auth0-spa-js';
 import { bindPluginMethods, deprecateRedirectUri } from './utils';
 
-interface ExtendedWindow extends Window {
-  __auth0__: {
-    appState:
-      | {
-          [key: string]: unknown;
-          [key: number]: unknown;
-        }
-      | undefined;
-  };
-}
-
-declare let window: ExtendedWindow;
-
 /**
  * Helper callback that's used by default before the plugin is installed.
  */
@@ -177,10 +164,6 @@ export class Auth0Plugin implements Auth0VueClient {
         const result = await this.handleRedirectCallback();
         const appState = result?.appState;
         const target = appState?.target ?? '/';
-
-        window.__auth0__ = {
-          appState
-        };
 
         window.history.replaceState({}, '', '/');
 
